@@ -15,7 +15,7 @@ jobs:
           install.packages("tidyverse")
           install.packages("skimr")
         shell: Rscript {0}
-      - Render Site
+      - name: Render Site
         run: Rscript -e 'rmarkdown::render_site(encoding = "UTF-8")'
       - run: mv covid_data.html index.html
       - name: Deploy
