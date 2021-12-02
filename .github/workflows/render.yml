@@ -1,0 +1,25 @@
+on:
+  push:
+    branches: [main]
+name: Render Site
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: r-lib/actions/setup-r@master
+      - uses: r-lib/actions/setup-pandoc@master
+      - name: Install dependencies
+        run: |
+          install.packages("rmarkdown")
+          install.packages("tidyverse")
+          install.packages("skimr")
+        shell: Rscript {0}
+      - Render Site
+        run: Rscript -e 'rmarkdown::render_site(encoding = "UTF-8")'
+      - run: mv covid_data.html index.html
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
