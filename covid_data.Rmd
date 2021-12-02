@@ -46,3 +46,44 @@ ggplot(canada_cases, aes(x = date, y = cases)) +
     x = "Time", y = "Confirmed COVID-19 cases (per million)",
     caption = "Source: Our World in Data")
 ```
+
+### New Per-Capita COVID-19 Cases in Canada over Time
+
+As I did before, I'll import the relevant data from OWID.
+
+```{r, message=FALSE, cache=TRUE}
+canada_new_cases <- read_csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/jhu/new_cases_per_million.csv")
+```
+
+Everything I mentioned about the formatting of the other CSV file holds true for this, too. Each country's data is in its own column, and each date's data are in their own rows.
+
+```{r}
+canada_new_cases <- canada_new_cases %>%
+  select(date, World, Canada, `United States`) %>%
+  gather(key = country, value = cases, -date)
+```
+
+Now, this data can be plotted. However, if I use the same method as I did with the prior dataset, it is hard to visualize any clear trends due to the fluctuations by week. This is especially apparent after July 2021.
+
+```{r, fig.align="center"}
+ggplot(canada_new_cases, aes(x = date, y = cases)) +
+  geom_line(aes(color = country)) +
+  scale_x_date(date_labels = "%b %y", date_breaks =  "2 months",
+    guide = guide_axis(angle = 60)) +
+  labs(title = "New Per-Capita COVID-19 Cases Over Time",
+    x = "Time", y = "Confirmed COVID-19 cases (per million)",
+    caption = "Source: Our World in Data")
+```
+
+So, to make the trends more clear, I'll plot the individual data points (as opposed to a line graph) and include a smoothened trendline.
+
+```{r, fig.align="center"}
+ggplot(canada_new_cases, aes(x = date, y = cases)) +
+  geom_jitter(aes(color = country), size = 0.1) +
+  geom_smooth(aes(color = country)) +
+  scale_x_date(date_labels = "%b %y", date_breaks =  "2 months",
+    guide = guide_axis(angle = 60)) +
+  labs(title = "New Per-Capita COVID-19 Cases Over Time",
+    x = "Time", y = "Confirmed COVID-19 cases (per million)",
+    caption = "Source: Our World in Data")
+```
