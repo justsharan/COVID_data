@@ -2,6 +2,9 @@
 title: Visualizing COVID-19 Data Using R
 author: Sharan S.
 output: html_document
+knit: (function(inputFile, encoding) { 
+  rmarkdown::render(inputFile,
+    encoding=encoding, output_file='index.html') })
 ---
 
 Researchers at [Our World in Data](https://ourworldindata.org/coronavirus-source-data) have aggregated data on COVID-19 cases, deaths, vaccinations, etc from various sources such as WHO and Johns Hopkins University, and made it available in a GitHub repository.
