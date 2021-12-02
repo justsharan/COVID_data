@@ -1,0 +1,10 @@
+---
+title: Visualizing COVID-19 Data Using R
+author: Sharan Srinivasan
+output: html_document
+---
+
+Researchers at [Our World in Data](https://ourworldindata.org/coronavirus-source-data) have aggregated data on COVID-19 cases, deaths, vaccinations, etc from various sources such as WHO and Johns Hopkins University, and made it available in a GitHub repository.
+
+I will be using this dataset to visualize various COVID-19 related metrics, and also test some hypotheses relating to the nature of COVID-19 cases.
+
