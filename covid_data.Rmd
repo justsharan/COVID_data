@@ -21,13 +21,13 @@ library(tidyverse)
 First, I'll import the dataset as such.
 
 ```{r, message=FALSE, cache=TRUE}
-canada_cases <- read_csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/jhu/total_cases_per_million.csv")
+total_cases_per_million <- read_csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/jhu/total_cases_per_million.csv")
 ```
 
 The raw data has each country's cases in its own column, and dates in rows. To tidy this data, I'll first filter out only the relevant countries and gather the country info under one column.
 
 ```{r}
-canada_cases <- canada_cases %>%
+canada_cases <- total_cases_per_million %>%
   select(date, World, Canada, `United States`) %>%
   gather(key = country, value = cases, -date)
 
@@ -52,13 +52,13 @@ ggplot(canada_cases, aes(x = date, y = cases)) +
 As I did before, I'll import the relevant data from OWID.
 
 ```{r, message=FALSE, cache=TRUE}
-canada_new_cases <- read_csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/jhu/new_cases_per_million.csv")
+new_cases_per_million <- read_csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/jhu/new_cases_per_million.csv")
 ```
 
 Everything I mentioned about the formatting of the other CSV file holds true for this, too. Each country's data is in its own column, and each date's data are in their own rows.
 
 ```{r}
-canada_new_cases <- canada_new_cases %>%
+canada_new_cases <- new_cases_per_million %>%
   select(date, World, Canada, `United States`) %>%
   gather(key = country, value = cases, -date)
 ```
