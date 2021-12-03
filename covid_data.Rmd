@@ -136,5 +136,7 @@ ggplot(vaccine_vs_cases, aes(x = date)) +
   geom_line(aes(y = daily_vaccinations_per_million / 10), color = "#56BCC2") +
   scale_y_continuous(name = "Daily COVID-19 cases (per million)",
     sec.axis = sec_axis(~ . * 10, name = "Daily COVID-19 vaccinations (per million)")) +
-  facet_wrap(~ country)
+  facet_wrap(~ country) +
+  labs(title = "Daily Per-Capita COVID-19 Cases and Vaccinations Over Time",
+    x = "Time", caption = "Source: Our World in Data")
 ```
