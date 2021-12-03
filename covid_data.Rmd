@@ -1,6 +1,5 @@
 ---
 title: Visualizing COVID-19 Data Using R
-author: Sharan S.
 output: html_document
 knit: (function(inputFile, encoding) { 
   rmarkdown::render(inputFile,
@@ -88,6 +87,54 @@ ggplot(canada_new_cases, aes(x = date, y = cases)) +
   scale_x_date(date_labels = "%b %y", date_breaks =  "2 months",
     guide = guide_axis(angle = 60)) +
   labs(title = "New Per-Capita COVID-19 Cases Over Time",
-    x = "Time", y = "Confirmed COVID-19 cases (per million)",
+    x = "Time", y = "Daily COVID-19 cases (per million)",
     caption = "Source: Our World in Data")
+```
+
+### COVID-19 Vaccination Data
+
+Now, I'll graph data relating to COVID-19 vaccinations in the aforementioned countries, and later, attempt to draw conclusions from looking at both vaccination and new COVID-19 cases data.
+
+First, I'll import the dataset as usual.
+
+```{r, message=FALSE, cache=TRUE}
+vaccine_data <- read_csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv")
+```
+
+This dataset does not have countries in separate columns, so there isn't any tidying needed, really. Here is a plot of the daily vaccinations per million people over time.
+
+```{r, fig.align="center"}
+vaccine_data %>%
+  filter(location == "Canada" | location == "United States") %>%
+  ggplot(aes(x = date, y = daily_vaccinations_per_million)) +
+  geom_line(aes(color = location)) +
+  scale_x_date(date_labels = "%b %y", date_breaks =  "2 months",
+    guide = guide_axis(angle = 60)) +
+  labs(title = "New Per-Capita COVID-19 Vaccinations Over Time",
+    x = "Time", y = "Daily vaccinations (per million)",
+    caption = "Source: Our World in Data")
+```
+
+This data is interesting on its own and says a lot about the two countries' vaccine distribution timelines. However, I feel that this data is more insightful when overlayed with the daily COVID-19 cases data from earlier.
+
+First, I'll combine the two relevant data together to form one tibble.
+
+```{r}
+vaccine_vs_cases <- vaccine_data %>%
+  select(date, location, daily_vaccinations_per_million) %>%
+  rename(country = location) %>%
+  left_join(canada_new_cases, by = c("date", "country")) %>%
+  filter(country == "Canada" | country == "United States")
+```
+
+Now, I'll overlay the daily per-capita vaccinations data with daily per-capita COVID-19 cases, and view this data for both countries:
+
+```{r, fig.align="center"}
+ggplot(vaccine_vs_cases, aes(x = date)) +
+  geom_jitter(aes(y = cases), color = "#E87D72", size = 0.1) +
+  geom_smooth(aes(y = cases), color = "#E87D72") +
+  geom_line(aes(y = daily_vaccinations_per_million / 10), color = "#56BCC2") +
+  scale_y_continuous(name = "Daily COVID-19 cases (per million)",
+    sec.axis = sec_axis(~ . * 10, name = "Daily COVID-19 vaccinations (per million)")) +
+  facet_wrap(~ country)
 ```
