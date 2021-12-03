@@ -15,7 +15,6 @@ Researchers at [Our World in Data](https://ourworldindata.org/coronavirus-source
 I will be using this dataset to visualize various COVID-19 related metrics, and also test some hypotheses relating to the nature of COVID-19 cases.
 
 ```{r, include=FALSE}
-library(skimr)
 library(tidyverse)
 ```
 
@@ -33,8 +32,6 @@ The raw data has each country's cases in its own column, and dates in rows. To t
 canada_cases <- total_cases_per_million %>%
   select(date, World, Canada, `United States`) %>%
   gather(key = country, value = cases, -date)
-
-skim_without_charts(canada_cases)
 ```
 
 Now, this data can be visualized using `ggplot2`.
